@@ -2,12 +2,11 @@ package main
 
 import (
 	"html/template"
-	"log"
 	"net/http"
 	"strconv"
 )
 
-func home(w http.ResponseWriter, r *http.Request) {
+func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
 		http.NotFound(w, r)
 		return
@@ -21,19 +20,19 @@ func home(w http.ResponseWriter, r *http.Request) {
 
 	ts, err := template.ParseFiles(files...)
 	if err != nil {
-		log.Println(err.Error())
+		app.serveError(w, err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
 
 	err = ts.ExecuteTemplate(w, "base", nil)
 	if err != nil {
-		log.Println(err.Error())
+		app.serveError(w, err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 	}
 }
 
-func about(w http.ResponseWriter, r *http.Request) {
+func (app *application) about(w http.ResponseWriter, r *http.Request) {
 	files := []string{
 		"./ui/html/partials/nav.tmpl.html",
 		"./ui/html/pages/about.tmpl.html",
@@ -42,18 +41,18 @@ func about(w http.ResponseWriter, r *http.Request) {
 
 	ts, err := template.ParseFiles(files...)
 	if err != nil {
-		log.Println(err.Error())
+		app.serveError(w, err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 	}
 
 	err = ts.ExecuteTemplate(w, "base", nil)
 	if err != nil {
-		log.Println(err.Error())
+		app.serveError(w, err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 	}
 }
 
-func contact(w http.ResponseWriter, r *http.Request) {
+func (app *application) contact(w http.ResponseWriter, r *http.Request) {
 	files := []string{
 		"./ui/html/partials/nav.tmpl.html",
 		"./ui/html/pages/contact.tmpl.html",
@@ -62,21 +61,21 @@ func contact(w http.ResponseWriter, r *http.Request) {
 
 	ts, err := template.ParseFiles(files...)
 	if err != nil {
-		log.Println(err.Error())
+		app.serveError(w, err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 	}
 
 	err = ts.ExecuteTemplate(w, "base", nil)
 	if err != nil {
-		log.Println(err.Error())
+		app.serveError(w, err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 	}
 }
 
-func snippetView(w http.ResponseWriter, r *http.Request) {
+func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(r.URL.Query().Get("id"))
 	if err != nil {
-		http.NotFound(w, r)
+		app.notFound(w)
 		return
 	}
 
@@ -88,23 +87,23 @@ func snippetView(w http.ResponseWriter, r *http.Request) {
 
 	ts, err := template.ParseFiles(files...)
 	if err != nil {
-		log.Println(err.Error())
+		app.serveError(w, err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 	}
 
 	err = ts.ExecuteTemplate(w, "base", id)
 	if err != nil {
-		log.Println(err.Error())
+		app.serveError(w, err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 	}
 }
 
-func snippetCreate(w http.ResponseWriter, r *http.Request) {
+func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		w.Header().Set("Allow", "POST")
 		// w.WriteHeader(http.StatusMethodNotAllowed)
 		// w.Write([]byte("Method not Allowed"))
-		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
+		app.clientError(w, http.StatusMethodNotAllowed)
 		return
 	}
 	w.Write([]byte("Create a new snippet..."))
