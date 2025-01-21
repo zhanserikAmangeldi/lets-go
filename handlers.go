@@ -14,6 +14,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 	}
 
 	files := []string{
+		"./ui/html/partials/nav.tmpl.html",
 		"./ui/html/pages/home.tmpl.html",
 		"./ui/html/base.tmpl.html",
 	}
@@ -34,6 +35,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 
 func about(w http.ResponseWriter, r *http.Request) {
 	files := []string{
+		"./ui/html/partials/nav.tmpl.html",
 		"./ui/html/pages/about.tmpl.html",
 		"./ui/html/base.tmpl.html",
 	}
@@ -53,6 +55,7 @@ func about(w http.ResponseWriter, r *http.Request) {
 
 func contact(w http.ResponseWriter, r *http.Request) {
 	files := []string{
+		"./ui/html/partials/nav.tmpl.html",
 		"./ui/html/pages/contact.tmpl.html",
 		"./ui/html/base.tmpl.html",
 	}
@@ -78,6 +81,7 @@ func snippetView(w http.ResponseWriter, r *http.Request) {
 	}
 
 	files := []string{
+		"./ui/html/partials/nav.tmpl.html",
 		"./ui/html/pages/snippetView.tmpl.html",
 		"./ui/html/base.tmpl.html",
 	}
